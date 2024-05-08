@@ -8,8 +8,8 @@ plugins {
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader("UTF-8") { reader ->
-        localProperties.load(reader)
+    localPropertiesFile.withRef("UTF-8") { Ref ->
+        localProperties.load(Ref)
     }
 }
 
