@@ -13,7 +13,7 @@ final _isAuthLoading =
     Provider<bool>((ref) => ref.watch(AppState.auth).isLoading);
 
 class GoogleDocsApp extends ConsumerStatefulWidget {
-  const GoogleDocsApp({Key? key}) : super(key: key);
+  const GoogleDocsApp({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _GoogleDocsAppState();

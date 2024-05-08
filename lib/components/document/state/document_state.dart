@@ -10,8 +10,8 @@ class DocumentState extends ControllerStateBase {
     this.quillDocument,
     this.quillController,
     this.isSavedRemotely = false,
-    AppError? error,
-  }) : super(error: error);
+    super.error,
+  });
 
   final String id;
   final DocumentPageData? documentPageData;

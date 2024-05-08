@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:docs/app/providers.dart';
 import 'package:docs/app/utils.dart';
@@ -73,10 +74,10 @@ class DocumentController extends StateNotifier<DocumentState> {
       state.quillController?.addListener(_quillControllerUpdate);
 
       documentListener = state.quillDocument?.changes.listen((event) {
-        final delta = event.item2;
-        final source = event.item3;
+        final delta = event.change;
+        final source = event.source;
 
-        if (source != ChangeSource.LOCAL) {
+        if (source != ChangeSource.local) {
           return;
         }
         _broadcastDeltaUpdate(delta);
@@ -98,7 +99,7 @@ class DocumentController extends StateNotifier<DocumentState> {
             delta,
             state.quillController?.selection ??
                 const TextSelection.collapsed(offset: 0),
-            ChangeSource.REMOTE,
+            ChangeSource.remote,
           );
         }
       },

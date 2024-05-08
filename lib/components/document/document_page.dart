@@ -1,13 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart' hide MenuBar;
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:docs/app/app.dart';
 import 'package:docs/app/navigation/routes.dart';
 import 'package:docs/app/providers.dart';
 import 'package:docs/components/document/state/document_controller.dart';
 import 'package:docs/components/document/widgets/widgets.dart';
-import 'package:routemaster/routemaster.dart';
-import 'package:tuple/tuple.dart';
 
 final _quillControllerProvider =
     Provider.family<QuillController?, String>((ref, id) {
@@ -72,14 +74,38 @@ final _documentTitleProvider = Provider.family<String?, String>((ref, id) {
 
 class _TitleTextEditor extends ConsumerStatefulWidget {
   const _TitleTextEditor({
-    Key? key,
     required this.documentId,
-  }) : super(key: key);
+  });
   final String documentId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       __TitleTextEditorState();
+
+  _TitleTextEditor copyWith({
+    String? documentId,
+  }) {
+    return _TitleTextEditor(
+      documentId: documentId ?? this.documentId,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'documentId': documentId,
+    };
+  }
+
+  factory _TitleTextEditor.fromMap(Map<String, dynamic> map) {
+    return _TitleTextEditor(
+      documentId: map['documentId'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory _TitleTextEditor.fromJson(String source) =>
+      _TitleTextEditor.fromMap(json.decode(source));
 }
 
 class __TitleTextEditorState extends ConsumerState<_TitleTextEditor> {
@@ -129,7 +155,7 @@ final _isSavedRemotelyProvider = Provider.family<bool, String>((ref, id) {
 });
 
 class _IsSavedWidget extends ConsumerWidget {
-  const _IsSavedWidget({Key? key, required this.documentId}) : super(key: key);
+  const _IsSavedWidget({required this.documentId});
 
   final String documentId;
 
@@ -151,9 +177,8 @@ class _IsSavedWidget extends ConsumerWidget {
 
 class _DocumentEditorWidget extends ConsumerStatefulWidget {
   const _DocumentEditorWidget({
-    Key? key,
     required this.documentId,
-  }) : super(key: key);
+  });
 
   final String documentId;
 
@@ -177,11 +202,13 @@ class __DocumentEditorState extends ConsumerState<_DocumentEditorWidget> {
 
     return GestureDetector(
       onTap: () => _focusNode.requestFocus(),
-      child: RawKeyboardListener(
+      child: KeyboardListener(
         focusNode: FocusNode(),
-        onKey: (event) {
-          if (event.data.isControlPressed && event.character == 'b' ||
-              event.data.isMetaPressed && event.character == 'b') {
+        onKeyEvent: (event) {
+          if (HardwareKeyboard.instance.isControlPressed &&
+                  event.character == 'b' ||
+              HardwareKeyboard.instance.isMetaPressed &&
+                  event.character == 'b') {
             if (quillController
                 .getSelectionStyle()
                 .attributes
@@ -200,59 +227,59 @@ class __DocumentEditorState extends ConsumerState<_DocumentEditorWidget> {
             elevation: 7,
             child: Padding(
               padding: const EdgeInsets.all(86.0),
-              child: QuillEditor(
-                controller: quillController,
-                scrollController: _scrollController,
-                scrollable: true,
-                focusNode: _focusNode,
-                autoFocus: false,
-                readOnly: false,
-                expands: false,
-                padding: EdgeInsets.zero,
-                customStyles: DefaultStyles(
-                  h1: DefaultTextBlockStyle(
-                    const TextStyle(
-                      fontSize: 36,
-                      color: Colors.black,
-                      height: 1.15,
-                      fontWeight: FontWeight.w600,
+              child: QuillEditor.basic(
+                configurations: QuillEditorConfigurations(
+                  controller: quillController,
+                  scrollable: true,
+                  autoFocus: false,
+                  expands: false,
+                  padding: EdgeInsets.zero,
+                  customStyles: DefaultStyles(
+                    h1: const DefaultTextBlockStyle(
+                      TextStyle(
+                        fontSize: 36,
+                        color: Colors.black,
+                        height: 1.15,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      VerticalSpacing(32, 28),
+                      VerticalSpacing(0, 0),
+                      null,
                     ),
-                    const Tuple2(32, 28),
-                    const Tuple2(0, 0),
-                    null,
-                  ),
-                  h2: DefaultTextBlockStyle(
-                    const TextStyle(
-                      fontSize: 30,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
+                    h2: const DefaultTextBlockStyle(
+                      TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      VerticalSpacing(28, 24),
+                      VerticalSpacing(0, 0),
+                      null,
                     ),
-                    const Tuple2(28, 24),
-                    const Tuple2(0, 0),
-                    null,
-                  ),
-                  h3: DefaultTextBlockStyle(
-                    TextStyle(
-                      fontSize: 24,
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.w600,
+                    h3: DefaultTextBlockStyle(
+                      TextStyle(
+                        fontSize: 24,
+                        color: Colors.grey[800],
+                        fontWeight: FontWeight.w600,
+                      ),
+                      const VerticalSpacing(18, 14),
+                      const VerticalSpacing(0, 0),
+                      null,
                     ),
-                    const Tuple2(18, 14),
-                    const Tuple2(0, 0),
-                    null,
-                  ),
-                  paragraph: DefaultTextBlockStyle(
-                    const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
+                    paragraph: const DefaultTextBlockStyle(
+                      TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      VerticalSpacing(2, 0),
+                      VerticalSpacing(0, 0),
+                      null,
                     ),
-                    const Tuple2(2, 0),
-                    const Tuple2(0, 0),
-                    null,
                   ),
                 ),
-                embedBuilder: _defaultEmbedBuilderWeb,
+                scrollController: _scrollController,
+                focusNode: _focusNode,
               ),
             ),
           ),
@@ -261,10 +288,9 @@ class __DocumentEditorState extends ConsumerState<_DocumentEditorWidget> {
     );
   }
 
-  Widget _defaultEmbedBuilderWeb(
-      BuildContext context, Embed node, bool readOnly) {
+  Widget _defaultEmbedBuilderWeb(BuildContext context, QuillRawEditor node) {
     throw UnimplementedError(
-      'Embeddable type "${node.value.type}" is not supported by default '
+      'Embeddable type "${node.runtimeType}" is not supported by default '
       'embed builder of QuillEditor. You must pass your own builder function '
       'to embedBuilder property of QuillEditor or QuillField widgets.',
     );
@@ -286,13 +312,12 @@ class _Toolbar extends ConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return QuillToolbar.basic(
-      controller: quillController,
-      iconTheme: const QuillIconTheme(
-        iconSelectedFillColor: AppColors.secondary,
+    return QuillToolbar.simple(
+      configurations: QuillSimpleToolbarConfigurations(
+        controller: quillController,
+        multiRowsDisplay: false,
+        showAlignmentButtons: true,
       ),
-      multiRowsDisplay: false,
-      showAlignmentButtons: true,
     );
   }
 }

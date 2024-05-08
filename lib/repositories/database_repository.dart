@@ -36,6 +36,7 @@ class DatabaseRepository with RepositoryExceptionMixin {
   }) async {
     Future.wait([
       _database.createDocument(
+        databaseId: databaseId,
         collectionId: CollectionNames.pages,
         documentId: documentId,
         data: {
@@ -45,6 +46,7 @@ class DatabaseRepository with RepositoryExceptionMixin {
         },
       ),
       _database.createDocument(
+        databaseId: databaseId,
         collectionId: CollectionNames.delta,
         documentId: documentId,
         data: {
@@ -64,6 +66,7 @@ class DatabaseRepository with RepositoryExceptionMixin {
 
   Future<DocumentPageData> _getPage(String documentId) async {
     final doc = await _database.getDocument(
+      databaseId: databaseId,
       collectionId: CollectionNames.pages,
       documentId: documentId,
     );
@@ -76,6 +79,7 @@ class DatabaseRepository with RepositoryExceptionMixin {
 
   Future<List<DocumentPageData>> _getAllPages(String userId) async {
     final result = await _database.listDocuments(
+      databaseId: databaseId,
       collectionId: CollectionNames.pages,
       queries: [Query.equal('owner', userId)],
     );
@@ -89,6 +93,7 @@ class DatabaseRepository with RepositoryExceptionMixin {
       required DocumentPageData documentPage}) async {
     return exceptionHandler(
       _database.updateDocument(
+        databaseId: databaseId,
         collectionId: CollectionNames.pages,
         documentId: documentId,
         data: documentPage.toMap(),
@@ -102,6 +107,7 @@ class DatabaseRepository with RepositoryExceptionMixin {
   }) {
     return exceptionHandler(
       _database.updateDocument(
+        databaseId: databaseId,
         collectionId: CollectionNames.delta,
         documentId: pageId,
         data: deltaData.toMap(),

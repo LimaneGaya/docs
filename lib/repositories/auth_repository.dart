@@ -38,7 +38,7 @@ class AuthRepository with RepositoryExceptionMixin {
     required String password,
   }) {
     return exceptionHandler(
-      _account.createSession(email: email, password: password),
+      _account.createEmailPasswordSession(email: email, password: password),
     );
   }
 

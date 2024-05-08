@@ -8,7 +8,7 @@ import 'package:docs/components/auth/widgets/widgets.dart';
 import 'package:routemaster/routemaster.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class LoginPage extends StatelessWidget {
 }
 
 class _LoginForm extends ConsumerStatefulWidget {
-  const _LoginForm({Key? key}) : super(key: key);
+  const _LoginForm();
 
   @override
   ConsumerState<_LoginForm> createState() => _LoginFormState();

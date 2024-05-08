@@ -4,7 +4,7 @@ const _menuTextStyle = TextStyle(fontSize: 20);
 
 class MenuBar extends StatelessWidget {
   const MenuBar({
-    Key? key,
+    super.key,
     this.leading = const [],
     this.trailing = const [],
     this.newDocumentPressed,
@@ -16,7 +16,7 @@ class MenuBar extends StatelessWidget {
     this.cutPressed,
     this.redoPressed,
     this.undoPressed,
-  }) : super(key: key);
+  });
 
   final List<Widget> leading;
   final List<Widget> trailing;
@@ -81,13 +81,12 @@ class MenuBar extends StatelessWidget {
 
 class _FileMenuButton extends StatelessWidget {
   const _FileMenuButton({
-    Key? key,
     this.newDocumentPressed,
     this.openDocumentsPressed,
     this.signOutPressed,
     this.membersPressed,
     this.inviteMembersPressed,
-  }) : super(key: key);
+  });
 
   final VoidCallback? newDocumentPressed;
   final VoidCallback? openDocumentsPressed;
@@ -160,13 +159,12 @@ class _FileMenuButton extends StatelessWidget {
 
 class _EditMenuButton extends StatelessWidget {
   const _EditMenuButton({
-    Key? key,
     this.undoPressed,
     this.redoPressed,
     this.cutPressed,
     this.copyPressed,
     this.pastePressed,
-  }) : super(key: key);
+  });
 
   final VoidCallback? undoPressed;
   final VoidCallback? redoPressed;
@@ -242,8 +240,7 @@ class _EditMenuButton extends StatelessWidget {
 
 class PopUpMenuTile extends StatelessWidget {
   const PopUpMenuTile(
-      {Key? key, required this.title, this.icon, this.isActive = false})
-      : super(key: key);
+      {super.key, required this.title, this.icon, this.isActive = false});
   final IconData? icon;
   final String title;
   final bool isActive;

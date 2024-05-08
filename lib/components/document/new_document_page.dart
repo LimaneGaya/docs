@@ -7,7 +7,7 @@ import 'package:routemaster/routemaster.dart';
 import 'package:uuid/uuid.dart';
 
 class NewDocumentPage extends ConsumerStatefulWidget {
-  const NewDocumentPage({Key? key}) : super(key: key);
+  const NewDocumentPage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -32,8 +32,9 @@ class _NewDocumentPageState extends ConsumerState<NewDocumentPage> {
             documentId: documentId,
             owner: ref.read(AppState.auth).user!.$id,
           );
-
-      Routemaster.of(context).push('${AppRoutes.document}/$documentId');
+      if (mounted) {
+        Routemaster.of(context).push('${AppRoutes.document}/$documentId');
+      }
     } on RepositoryException catch (_) {
       setState(() {
         showError = true;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:docs/app/navigation/routes.dart';
 import 'package:docs/app/providers.dart';
@@ -39,7 +39,6 @@ class _AllDocumentsPopopState extends ConsumerState<AllDocumentsPopup> {
 
 class _DocumentsGrid extends StatelessWidget {
   const _DocumentsGrid({
-    super.key,
     required this.documents,
   });
 

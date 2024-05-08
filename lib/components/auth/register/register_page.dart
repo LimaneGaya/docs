@@ -8,7 +8,7 @@ import 'package:docs/components/auth/widgets/widgets.dart';
 import 'package:routemaster/routemaster.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class RegisterPage extends StatelessWidget {
 }
 
 class _RegisterForm extends ConsumerStatefulWidget {
-  const _RegisterForm({Key? key}) : super(key: key);
+  const _RegisterForm();
 
   @override
   ConsumerState<_RegisterForm> createState() => _RegisterFormState();
